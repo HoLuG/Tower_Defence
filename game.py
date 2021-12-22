@@ -4,6 +4,7 @@ from skeleton import Skeleton
 from bat import Bat
 import time
 import random
+import sys
 from archerTower import ArcherTower
 
 
@@ -39,7 +40,6 @@ class Game:
         self.current_wave = waves[self.wave][:]
 
     def gen_enemies(self):
-
         if sum(self.current_wave) == 0:
             if len(self.enemies) == 0:
                 pygame.time.delay(10000)  # пауза после прохождения волны
@@ -121,4 +121,5 @@ class Game:
             pygame.event.pump()
             self.draw()
         pygame.quit()
+        sys.exit()
 
