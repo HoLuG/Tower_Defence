@@ -1,34 +1,47 @@
 from game import Game
 import pygame
+import sys
 import os
+
+
+filename = "game assets/" + 'PingPong.ttf'
+
+
+def print_text(self, message, x, y, font_color=(23, 41, 32), font_type=filename,
+               font_size=30):  # печать текста на экран
+    font_type = pygame.font.Font(font_type, font_size)
+    text = font_type.render(message, True, font_color)
+    self.win.blit(text, (x, y))
 
 
 class MainMenu:
     def __init__(self, win):
-        self.start_btn = pygame.image.load(os.path.join("game assets", "play.png")).convert_alpha()
-        self.start_btn_2 = pygame.image.load(os.path.join("game assets", "play_2.png")).convert_alpha()
+        self.empty_btn = pygame.image.load(os.path.join("game assets", "empty.png")).convert_alpha()
         self.width = 1350
         self.height = 700
         self.bg = pygame.image.load(os.path.join("game assets", "start.png"))
         self.bg = pygame.transform.scale(self.bg, (self.width, self.height))
         self.win = win
-        self.btn = (self.width/2 - self.start_btn.get_width()/2, 200, self.start_btn.get_width(), self.start_btn.get_height())
+        self.btn_start = (self.width/2 - self.empty_btn.get_width()/2, 200, self.empty_btn.get_width(), self.empty_btn.get_height())
+        self.btn_quit = (self.width / 2 - self.empty_btn.get_width() / 2, 300, self.empty_btn.get_width(), self.empty_btn.get_height())
 
     def run(self):
         run = True
-
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-
                 if event.type == pygame.MOUSEBUTTONUP:
                     x, y = pygame.mouse.get_pos()
-                    if self.btn[0] <= x <= self.btn[0] + self.btn[2]:
-                        if self.btn[1] <= y <= self.btn[1] + self.btn[3]:
+                    if self.btn_start[0] <= x <= self.btn_start[0] + self.btn_start[2]:
+                        if self.btn_start[1] <= y <= self.btn_start[1] + self.btn_start[3]:
                             game = Game(self.win)
                             game.run()
                             del game
+                    if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2]:
+                        if self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
+                            pygame.quit()
+                            sys.exit()
             self.draw()
 
         pygame.quit()
@@ -36,8 +49,18 @@ class MainMenu:
     def draw(self):
         x, y = pygame.mouse.get_pos()
         self.win.blit(self.bg, (0, 0))
-        if self.btn[0] <= x <= self.btn[0] + self.btn[2] and self.btn[1] <= y <= self.btn[1] + self.btn[3]:
-            self.win.blit(self.start_btn_2, (self.btn[0], self.btn[1]))
+        self.win.blit(self.empty_btn, (self.btn_start[0], self.btn_start[1]))
+        self.win.blit(self.empty_btn, (self.btn_quit[0], self.btn_quit[1]))
+        if self.btn_start[0] <= x <= self.btn_start[0] + self.btn_start[2] and self.btn_start[1] <= y <= self.btn_start[1] + self.btn_start[3]:
+            print_text(self, message='PLAY', x=self.width / 2 - self.empty_btn.get_width() / 2 + 60, y=203,
+                       font_size=60, font_color='grey')
         else:
-            self.win.blit(self.start_btn, (self.btn[0], self.btn[1]))
+            print_text(self, message='PLAY', x=self.width / 2 - self.empty_btn.get_width() / 2 + 60, y=203,
+                       font_size=60, font_color='white')
+
+        if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2] and self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
+            print_text(self, message='Quit', x=self.width / 2 - self.empty_btn.get_width() / 2 + 50, y=303,
+                       font_size=60, font_color='grey')
+        else:
+            print_text(self, message='Quit', x=self.width / 2 - self.empty_btn.get_width() / 2 + 50, y=303, font_size=60, font_color='white')
         pygame.display.update()
