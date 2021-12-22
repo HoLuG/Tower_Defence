@@ -17,11 +17,11 @@ support_tower_names = ["range", "damage"]
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, win):
         self.width = 1350
         self.height = 700
+        self.win = win
         self.timer = time.time()
-        self.win = pygame.display.set_mode((self.width, self.height))
         self.enemies = []
         self.towers = [ArcherTower(370, 370), ArcherTower(1100, 170)]
         self.attack_towers = []
@@ -122,8 +122,4 @@ class Game:
             pygame.event.pump()
             self.draw()
         pygame.quit()
-
-
-g = Game()
-g.run()
 
