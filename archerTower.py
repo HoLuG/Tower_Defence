@@ -3,7 +3,6 @@ from tower import Tower
 import os
 import math
 import time
-pygame.init()
 
 
 class ArcherTower(Tower):
@@ -51,7 +50,6 @@ class ArcherTower(Tower):
         self.range = r
 
     def attack(self, enemies):
-        money = 10
         self.inRange = False
         enemy_closest = []
         for enemy in enemies:

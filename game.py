@@ -6,7 +6,6 @@ import time
 import random
 from archerTower import ArcherTower
 
-pygame.init()
 
 waves = [[3, 1, 0],
          [2, 0, 0],
