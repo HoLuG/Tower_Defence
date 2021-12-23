@@ -67,12 +67,6 @@ class ArcherTower(Tower):
 
         if len(enemy_closest) > 0:
             first_enemy = enemy_closest[0]
-            if time.time() - self.timer >= 0.85:
-                self.timer = time.time()
-                if first_enemy.hit(self.damage):
-                    money = first_enemy.money
-                    enemies.remove(first_enemy)
-                    return money
 
             if first_enemy.x > self.coord_x and not(self.left):
                 self.left = True
@@ -82,4 +76,11 @@ class ArcherTower(Tower):
                 self.left = False
                 for x, img in enumerate(self.archer_imgs):
                     self.archer_imgs[x] = pygame.transform.flip(img, True, False)
+
+            if time.time() - self.timer >= 0.85:
+                self.timer = time.time()
+                if first_enemy.hit(self.damage):
+                    money = first_enemy.money
+                    enemies.remove(first_enemy)
+                    return money
         return 0

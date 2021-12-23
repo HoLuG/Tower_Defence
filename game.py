@@ -103,7 +103,6 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.clicks += [pos]
                     print(self.clicks)
-
             if not self.pause:
                 to_del = []
                 for en in self.enemies:
@@ -122,11 +121,9 @@ class Game:
                     tw.attack(self.enemies)
 
                 if self.lives <= 0:
-                    print("You Lose")
-                    exit()
+                    running = False
 
             pygame.event.pump()
             self.draw()
-        pygame.quit()
-        sys.exit()
+
 
