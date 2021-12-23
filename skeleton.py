@@ -15,7 +15,7 @@ class Skeleton(Enemy):
         super().__init__()
         self.name = "skeleton"
         self.money = 1
-        self.max_health = 3
+        self.max_health = 2
         self.health = self.max_health
         self.imgs = imgs[:]
 

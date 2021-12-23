@@ -16,6 +16,7 @@ def print_text(self, message, x, y, font_color=(23, 41, 32), font_type=filename,
 
 class MainMenu:
     def __init__(self, win):
+        pygame.display.set_icon(pygame.image.load("game assets/icon.jpg").convert_alpha())
         self.empty_btn = pygame.image.load(os.path.join("game assets", "empty.png")).convert_alpha()
         self.width = 1350
         self.height = 700

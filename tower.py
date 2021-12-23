@@ -1,6 +1,4 @@
 import pygame
-
-import os
 import math
 
 
@@ -25,10 +23,7 @@ class Tower:
         img = self.tower_imgs[self.level - 1]
         win.blit(img, (self.x-img.get_width()//2, self.y-img.get_height()//2))
 
-
-
-    def draw_placement(self,win):
-        # draw range circle
+    def draw_placement(self, win):
         surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
         pygame.draw.circle(surface, self.place_color, (50,50), 50, 0)
 

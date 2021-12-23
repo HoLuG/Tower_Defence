@@ -30,11 +30,6 @@ class Enemy:
         self.draw_health_bar(win)
 
     def draw_health_bar(self, win):
-        """
-        draw health bar above enemy
-        :param win: surface
-        :return: None
-        """
         length = 50
         move_by = round(length / self.max_health)
         health_bar = move_by * self.health
@@ -101,5 +96,3 @@ class Enemy:
         if self.health <= 0:
             return True
         return False
-
-

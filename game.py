@@ -7,8 +7,8 @@ import random
 import sys
 from archerTower import ArcherTower
 
-
-waves = [[3, 1, 0],
+pygame.init()
+waves = [[40, 0, 0],
          [2, 0, 0],
          [0, 1, 0],
          ]
@@ -23,7 +23,7 @@ class Game:
         self.win = win
         self.timer = time.time()
         self.enemies = []
-        self.towers = [ArcherTower(370, 370), ArcherTower(1100, 170)]
+        self.towers = [ArcherTower(375, 368), ArcherTower(1105, 155), ArcherTower(880, 330)]
         self.attack_towers = []
         self.support_towers = []
         self.lives = 10

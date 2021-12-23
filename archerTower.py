@@ -6,19 +6,19 @@ import time
 
 
 class ArcherTower(Tower):
-    def __init__(self, x,y):
+    def __init__(self, x, y):
         super().__init__(x, y)
         tower_imgs1 = []
         archer_imgs1 = []
         tower_imgs1.append(pygame.transform.scale(
             pygame.image.load(os.path.join("game assets/Towers/archertower.png")).convert_alpha(), (150, 150)))
-        for x in range(1, 6):
+        for i in range(1, 6):
             archer_imgs1.append(pygame.transform.scale(
-                pygame.image.load(os.path.join("game assets/Towers", 'archer_' + str(x) + ".png")).convert_alpha(), (60, 60)))
+                pygame.image.load(os.path.join("game assets/Towers", 'archer_' + str(i) + ".png")).convert_alpha(), (60, 60)))
         self.archer_imgs = archer_imgs1[:]
         self.tower_imgs = tower_imgs1[:]
         self.archer_count = 0
-        self.range = 200
+        self.range = 220
         self.original_range = self.range
         self.inRange = False
         self.left = True
@@ -28,6 +28,7 @@ class ArcherTower(Tower):
         self.moving = False
         self.name = "archer"
         self.timer = time.time()
+        self.coord_x, self.coord_y = x, y
 
     def draw(self, win):
         super().draw(win)
@@ -43,8 +44,12 @@ class ArcherTower(Tower):
             add = -25
         else:
             add = -archer.get_width() + 10
+
         self.archer_count += 1
-        win.blit(archer, ((self.x + add), (self.y - archer.get_height() - 10)))
+        surface = pygame.Surface((self.range * 2, self.range * 2), pygame.SRCALPHA, 32)
+        pygame.draw.circle(surface, (128, 128, 128, 120), (self.range, self.range), self.range)
+        win.blit(surface, (self.coord_x - self.range, self.coord_y - self.range))
+        win.blit(archer, ((self.coord_x + add), (self.coord_y - archer.get_height() - 10)))
 
     def change_range(self, r):
         self.range = r
@@ -55,13 +60,11 @@ class ArcherTower(Tower):
         for enemy in enemies:
             x = enemy.x
             y = enemy.y
-            dis = math.sqrt((self.x - 80/2 - x)**2 + (self.y - 80 /2 - y)**2)
+            dis = math.sqrt((self.coord_x - x)**2 + (self.coord_y - y)**2)
             if dis <= self.range:
                 self.inRange = True
                 enemy_closest.append(enemy)
 
-        enemy_closest.sort(key=lambda x: x.path_pos)
-        enemy_closest = enemy_closest[::-1]
         if len(enemy_closest) > 0:
             first_enemy = enemy_closest[0]
             if time.time() - self.timer >= 0.85:
@@ -71,11 +74,11 @@ class ArcherTower(Tower):
                     enemies.remove(first_enemy)
                     return money
 
-            if first_enemy.x > self.x and not(self.left):
+            if first_enemy.x > self.coord_x and not(self.left):
                 self.left = True
                 for x, img in enumerate(self.archer_imgs):
                     self.archer_imgs[x] = pygame.transform.flip(img, True, False)
-            elif self.left and first_enemy.x < self.x:
+            elif self.left and first_enemy.x < self.coord_x:
                 self.left = False
                 for x, img in enumerate(self.archer_imgs):
                     self.archer_imgs[x] = pygame.transform.flip(img, True, False)
