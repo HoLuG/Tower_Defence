@@ -18,6 +18,9 @@ class MainMenu:
     def __init__(self, win):
         pygame.display.set_icon(pygame.image.load("game assets/icon.jpg").convert_alpha())
         self.empty_btn = pygame.image.load(os.path.join("game assets", "empty.png")).convert_alpha()
+        self.logo = pygame.transform.scale(pygame.image.load(os.path.join("game assets", "logo.png")).convert_alpha(), (500, 500))
+        self.logo_2 = pygame.transform.flip(pygame.transform.scale(pygame.image.load(os.path.join("game assets", "logo_2.png")).convert_alpha(),
+                                           (475, 475)), True, False)
         self.width = 1350
         self.height = 700
         self.bg = pygame.image.load(os.path.join("game assets", "start.png"))
@@ -50,6 +53,8 @@ class MainMenu:
     def draw(self):
         x, y = pygame.mouse.get_pos()
         self.win.blit(self.bg, (0, 0))
+        self.win.blit(self.logo, (75, 100))
+        self.win.blit(self.logo_2, (800, 100))
         self.win.blit(self.empty_btn, (self.btn_start[0], self.btn_start[1]))
         self.win.blit(self.empty_btn, (self.btn_quit[0], self.btn_quit[1]))
         if self.btn_start[0] <= x <= self.btn_start[0] + self.btn_start[2] and self.btn_start[1] <= y <= self.btn_start[1] + self.btn_start[3]:

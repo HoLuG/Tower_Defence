@@ -6,6 +6,7 @@ import time
 import random
 import sys
 from archerTower import ArcherTower
+from game_menu import PlayPauseButton
 
 pygame.init()
 waves = [[40, 0, 0],
@@ -14,6 +15,9 @@ waves = [[40, 0, 0],
          ]
 attack_tower_names = ["archer", "archer2"]
 support_tower_names = ["range", "damage"]
+
+play_btn = pygame.transform.scale(pygame.image.load(os.path.join("game assets", "play.png")), (50, 50))
+pause_btn = pygame.transform.scale(pygame.image.load(os.path.join("game assets", "pause.png")), (50, 50))
 
 
 class Game:
@@ -38,6 +42,7 @@ class Game:
         self.wave = 0
         self.pause = False
         self.current_wave = waves[self.wave][:]
+        self.playPauseButton = PlayPauseButton(play_btn, pause_btn, 20, self.height - 60)
 
     def gen_enemies(self):
         if sum(self.current_wave) == 0:
@@ -78,6 +83,8 @@ class Game:
 
         self.win.blit(text, (start_x - text.get_width() - 10, 40))
         self.win.blit(money, (start_x, 65))
+
+        self.playPauseButton.draw(self.win)
         pygame.display.update()
 
     def run(self):
