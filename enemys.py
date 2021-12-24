@@ -1,5 +1,4 @@
 import pygame
-import os
 import math
 
 
@@ -10,7 +9,11 @@ class Enemy:
         self.animation_count = 0
         self.health = 1
         self.vel = 3
-        self.path = [(6, 548), (55, 547), (119, 537), (182, 522), (215, 483), (242, 435), (260, 386), (287, 341), (328, 328), (383, 319), (440, 298), (474, 259), (497, 198), (506, 146), (545, 113), (589, 110), (633, 111), (1127, 103), (1232, 131), (1271, 158), (1278, 219), (1257, 267), (1213, 308), (1139, 329), (1083, 337), (1043, 378), (1040, 423), (1043, 477), (1056, 535), (1149, 553), (1196, 567), (1216, 599), (1229, 677), (1231, 694), (1231, 800)]
+        self.path = [(6, 548), (55, 547), (119, 537), (182, 522), (215, 483), (242, 435), (260, 386), (287, 341),
+                     (328, 328), (383, 319), (440, 298), (474, 259), (497, 198), (506, 146), (545, 113), (589, 110),
+                     (633, 111), (1127, 103), (1232, 131), (1271, 158), (1278, 219), (1257, 267), (1213, 308),
+                     (1139, 329), (1083, 337), (1043, 378), (1040, 423), (1043, 477), (1056, 535), (1149, 553),
+                     (1196, 567), (1216, 599), (1229, 677), (1231, 694), (1231, 800)]
         self.x = self.path[0][0]
         self.y = self.path[0][1]
         self.img = None
@@ -34,12 +37,12 @@ class Enemy:
         move_by = round(length / self.max_health)
         health_bar = move_by * self.health
 
-        pygame.draw.rect(win, (255,0,0), (self.x-25, self.y-105, length, 10), 0)
+        pygame.draw.rect(win, (255, 0, 0), (self.x-25, self.y-105, length, 10), 0)
         pygame.draw.rect(win, (0, 255, 0), (self.x-25, self.y - 105, health_bar, 10), 0)
 
-    def collide(self, X, Y):
-        if X <= self.x + self.width and X >= self.x:
-            if Y <= self.y + self.height and Y >= self.y:
+    def collide(self, x, y):
+        if self.x <= x <= self.x + self.width:
+            if self.y <= y <= self.y + self.height:
                 return True
         return False
 
@@ -60,7 +63,7 @@ class Enemy:
             length = 1
         dirn = (dirn[0] / length, dirn[1] / length)
 
-        if dirn[0] < 0 and not(self.flipped):
+        if dirn[0] < 0 and not self.flipped:
             self.flipped = True
             for x, img in enumerate(self.imgs):
                 self.imgs[x] = pygame.transform.flip(img, True, False)
@@ -68,8 +71,6 @@ class Enemy:
             self.flipped = False
             for x, img in enumerate(self.imgs):
                 self.imgs[x] = pygame.transform.flip(img, True, False)
-
-
         move_x, move_y = ((self.x + dirn[0]), (self.y + dirn[1]))
 
         self.x = move_x

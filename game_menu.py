@@ -36,13 +36,13 @@ class PlayPauseButton(Button):
         self.y = y
         self.width = self.img.get_width()
         self.height = self.img.get_height()
-        self.paused = True
 
-    def draw(self, win):
+    def draw(self, win, paused):
+        self.paused = paused
         if self.paused:
-            win.blit(self.pause, (self.x, self.y))
-        else:
             win.blit(self.play, (self.x, self.y))
+        else:
+            win.blit(self.pause, (self.x, self.y))
 
 
 class Menu:

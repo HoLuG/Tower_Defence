@@ -1,4 +1,3 @@
-import pygame
 import math
 
 
@@ -23,16 +22,10 @@ class Tower:
         img = self.tower_imgs[self.level - 1]
         win.blit(img, (self.x-img.get_width()//2, self.y-img.get_height()//2))
 
-    def draw_placement(self, win):
-        surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
-        pygame.draw.circle(surface, self.place_color, (50,50), 50, 0)
-
-        win.blit(surface, (self.x - 50, self.y - 50))
-
-    def click(self, X, Y):
+    def click(self, x, y):
         img = self.tower_imgs[self.level - 1]
-        if X <= self.x - img.get_width()//2 + self.width and X >= self.x - img.get_width()//2:
-            if Y <= self.y + self.height - img.get_height()//2 and Y >= self.y - img.get_height()//2:
+        if x <= self.x - img.get_width()//2 + self.width and x >= self.x - img.get_width()//2:
+            if y <= self.y + self.height - img.get_height()//2 and y >= self.y - img.get_height()//2:
                 return True
         return False
 
@@ -43,13 +36,11 @@ class Tower:
         self.x = x
         self.y = y
 
-    def collide(self, otherTower):
-        x2 = otherTower.x
-        y2 = otherTower.y
+    def collide(self, othertower):
+        x2 = othertower.x
+        y2 = othertower.y
         dis = math.sqrt((x2 - self.x)**2 + (y2 - self.y)**2)
         if dis >= 100:
             return False
         else:
             return True
-
-

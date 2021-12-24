@@ -7,7 +7,8 @@ for x in range(25):
     add_str = str(x)
     if x < 10:
         add_str = "0" + add_str
-    imgs.append(pygame.transform.scale(pygame.image.load(os.path.join("game assets/enemies2", "Version1_Walk_" + add_str + ".png")), (80, 80)))
+    imgs.append(pygame.transform.scale(pygame.image.load(
+        os.path.join("game assets/enemies2", "Version1_Walk_" + add_str + ".png")), (80, 80)))
 
 
 class Bat(Enemy):
