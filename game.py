@@ -2,6 +2,7 @@ import pygame
 import os
 from skeleton import Skeleton
 from bat import Bat
+from orc import Orc
 import time
 import random
 import sys
@@ -20,8 +21,8 @@ def print_text(self, message, x, y, font_color=(23, 41, 32), font_type=filename,
     self.win.blit(text, (x, y))
 
 
-waves = [[40, 0, 0],
-         [2, 0, 0],
+waves = [[1, 0, 3],
+         [2, 0, 2],
          [0, 1, 0],
          ]
 attack_tower_names = ["archer", "archer2"]
@@ -66,15 +67,12 @@ class Game:
     def gen_enemies(self):
         if sum(self.current_wave) == 0:
             if len(self.enemies) == 0:
-                print(1)
                 if self.wave + 1 < len(waves):
                     self.wave += 1
                     self.current_wave = waves[self.wave]
-                else:
-                    self.pause = True
 
         else:
-            wave_enemies = [Skeleton(), Bat()]
+            wave_enemies = [Skeleton(), Bat(), Orc()]
             for x in range(len(self.current_wave)):
                 if self.current_wave[x] != 0:
                     self.enemies.append(wave_enemies[x])
@@ -111,21 +109,37 @@ class Game:
         pygame.display.update()
 
     def draw_end(self, x, y, end):
-        pygame.draw.rect(self.win, (139, 69, 19), (400, 50, 550, 600))
+        ending = pygame.transform.scale(pygame.image.load(os.path.join
+                                                          ("game assets", "ending.png")).convert_alpha(), (550, 600))
+        self.win.blit(ending, (400, 50))
         self.win.blit(self.empty_btn, (self.btn_quit[0], self.btn_quit[1]))
+        self.win.blit(self.empty_btn, (self.btn_quit[0], self.btn_quit[1] + 100))
         if end == 'Bad':
-            message_1 = 'YOU LOSE'
+            message = 'RETURN'
+            x_mes = self.width / 2 - self.empty_btn.get_width() / 2 + 22
+            print_text(self, message='YOU LOSE', x=400, y=100,
+                       font_size=125, font_color='red')
         else:
-            message_1 = 'YOU WIN'
-        print_text(self, message=message_1, x=400, y=100,
-                   font_size=125, font_color='black')
+            message = "LOBBY"
+            x_mes = self.width / 2 - self.empty_btn.get_width() / 2 + 34
+            print_text(self, message='Congratulations!!!', x=460, y=70,
+                       font_size=50, font_color='black')
+            print_text(self, message='YOU WIN', x=429, y=100,
+                   font_size=125, font_color='green')
 
         if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2] and \
                 self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
-            print_text(self, message='Return', x=self.width / 2 - self.empty_btn.get_width() / 2 + 22, y=303,
+            print_text(self, message=message, x=x_mes, y=303,
                        font_size=60, font_color='grey')
         else:
-            print_text(self, message='Return', x=self.width / 2 - self.empty_btn.get_width() / 2 + 22, y=303,
+            print_text(self, message=message, x=x_mes, y=303,
+                       font_size=60, font_color='white')
+        if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2] and \
+                self.btn_quit[1] + 100 <= y <= self.btn_quit[1] + self.btn_quit[3] + 100:
+            print_text(self, message='QUIT', x=self.width / 2 - self.empty_btn.get_width() / 2 + 50, y=403,
+                       font_size=60, font_color='grey')
+        else:
+            print_text(self, message='Quit', x=self.width / 2 - self.empty_btn.get_width() / 2 + 50, y=403,
                        font_size=60, font_color='white')
         pygame.display.update()
 
@@ -184,6 +198,9 @@ class Game:
                 running = False
                 end = 'Bad'
 
+            if self.wave + 1 >= len(waves):
+                running = False
+
             pygame.event.pump()
             self.draw()
 
@@ -192,10 +209,13 @@ class Game:
             x, y = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    print(x, y, self.btn_quit)
                     if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2] and \
                             self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
                         running = False
+                    if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2] and \
+                            self.btn_quit[1] + 100 <= y <= self.btn_quit[1] + self.btn_quit[3] + 100:
+                        pygame.quit()
+                        sys.exit()
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
