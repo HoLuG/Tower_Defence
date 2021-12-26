@@ -48,9 +48,6 @@ class ArcherTower(Tower):
         win.blit(surface, (self.coord_x - self.range, self.coord_y - self.range))
         win.blit(archer, ((self.coord_x + add), (self.coord_y - archer.get_height() - 10)))
 
-    def change_range(self, r):
-        self.range = r
-
     def attack(self, enemies):
         self.inRange = False
         enemy_closest = []

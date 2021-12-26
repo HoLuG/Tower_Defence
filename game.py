@@ -142,7 +142,7 @@ class Game:
             print_text(self, message='Congratulations!!!', x=460, y=70,
                        font_size=50, font_color='black')
             print_text(self, message='YOU WIN', x=429, y=100,
-                   font_size=125, font_color='green')
+                       font_size=125, font_color='green')
 
         if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2] and \
                 self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:

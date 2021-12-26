@@ -55,7 +55,6 @@ class MainMenu:
                             pygame.quit()
                             sys.exit()
             self.draw()
-
         pygame.quit()
 
     def draw(self):
