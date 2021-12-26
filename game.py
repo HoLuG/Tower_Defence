@@ -34,29 +34,36 @@ pause_btn = pygame.transform.scale(pygame.image.load(os.path.join("game assets",
 
 class Game:
     def __init__(self, win):
+        self.num = 0
         self.width = 1350
         self.height = 700
         self.win = win
         self.timer = time.time()
         self.enemies = []
-        self.towers = [ArcherTower(375, 368), ArcherTower(1105, 155), ArcherTower(880, 330)]
+        self.towers = []
         self.attack_towers = []
-        self.support_towers = []
         self.lives = 5
-        self.money = 1000
+        self.money = 450
+        self.action = False
         self.life_font = pygame.font.SysFont("comicsans", 65)
-        self.selected_tower = None
         self.bg = pygame.image.load(os.path.join("game assets", "mb.png"))
+        self.ending = pygame.transform.scale(
+            pygame.image.load(os.path.join("game assets", "ending.png")).convert_alpha(), (550, 600))
+        self.choice = pygame.transform.scale(
+            pygame.image.load(os.path.join("game assets", "choice.png")).convert_alpha(), (900, 200))
         self.lives_img = pygame.transform.scale(pygame.image.load(os.path.join("game assets", "heart.png")).
                                                 convert_alpha(), (60, 60))
         self.money_img = pygame.transform.scale(pygame.image.load(os.path.join("game assets", "money.png")).
                                                 convert_alpha(), (60, 60))
         self.empty_btn = pygame.image.load(os.path.join("game assets", "empty.png")).convert_alpha()
+
         self.btn_quit = (self.width / 2 - self.empty_btn.get_width() / 2, 300, self.empty_btn.get_width(),
                          self.empty_btn.get_height())
+        self.flags = [False, False, False, False, False, False, False]
         self.bg = pygame.transform.scale(self.bg, (self.width, self.height))
-        self.clicks = []
         self.wave = 0
+        self.towers_in = [ArcherTower(370, 370), ArcherTower(620, 150), ArcherTower(93, 390), ArcherTower(1105, 155),
+                          ArcherTower(870, 330), ArcherTower(1157, 370), ArcherTower(1107, 580)]
         self.pause = False
         self.current_wave = waves[self.wave][:]
         self.playPauseButton = PlayPauseButton(play_btn, pause_btn, 20, self.height - 60)
@@ -105,13 +112,24 @@ class Game:
         self.win.blit(money, (start_x, 65))
 
         self.playPauseButton.draw(self.win, self.pause)
+        if self.action and self.money >= 200:
+            self.win.blit(self.choice, (250, 200))
+            print_text(self, message='Do you want to build tower for 200 money?', x=260, y=220,
+                       font_size=40, font_color='black')
+            self.win.blit(self.empty_btn, (self.btn_quit[0] - 200, self.btn_quit[1]))
+            self.win.blit(self.empty_btn, (self.btn_quit[0] + 250, self.btn_quit[1]))
+        elif self.action:
+            self.win.blit(self.choice, (250, 200))
+            print_text(self, message='Not enough money', x=430, y=220,
+                       font_size=60, font_color='black')
+            print_text(self, message='(200 required)', x=590, y=280,
+                       font_size=30, font_color='black')
+            self.win.blit(self.empty_btn, (self.btn_quit[0] + 20, self.btn_quit[1] + 20))
 
         pygame.display.update()
 
     def draw_end(self, x, y, end):
-        ending = pygame.transform.scale(pygame.image.load(os.path.join
-                                                          ("game assets", "ending.png")).convert_alpha(), (550, 600))
-        self.win.blit(ending, (400, 50))
+        self.win.blit(self.ending, (400, 50))
         self.win.blit(self.empty_btn, (self.btn_quit[0], self.btn_quit[1]))
         self.win.blit(self.empty_btn, (self.btn_quit[0], self.btn_quit[1] + 100))
         if end == 'Bad':
@@ -166,6 +184,33 @@ class Game:
                 if time.time() - self.timer >= random.randrange(1, 9):
                     self.timer = time.time()
                     self.gen_enemies()
+
+            if self.action and self.money >= 200:
+                if self.btn_quit[0] - 200 <= x <= self.btn_quit[0] - 200 + self.btn_quit[2] and \
+                        self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
+                    print_text(self, message='BUY', x=430, y=305,
+                               font_size=60, font_color='grey')
+                else:
+                    print_text(self, message='BUY', x=430, y=305,
+                               font_size=60, font_color='white')
+                if self.btn_quit[0] + 250 <= x <= self.btn_quit[0] + 250 + self.btn_quit[2] and \
+                        self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
+                    print_text(self, message='RETURN', x=833, y=305,
+                               font_size=60, font_color='grey')
+                else:
+                    print_text(self, message='RETURN', x=833, y=305,
+                               font_size=60, font_color='white')
+
+            elif self.action:
+                if self.btn_quit[0] + 20 <= x <= self.btn_quit[0] + 20 + self.btn_quit[2] and \
+                        self.btn_quit[1] + 20 <= y <= self.btn_quit[1] + 20 + self.btn_quit[3]:
+                    print_text(self, message='BACK', x=635, y=322,
+                               font_size=60, font_color='grey')
+                else:
+                    print_text(self, message='BACK', x=635, y=322,
+                               font_size=60, font_color='white')
+            pygame.display.update()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -176,6 +221,54 @@ class Game:
                         self.pause = True
                     elif 20 <= x <= 20 + 50 and 640 <= y <= 640 + 50 and self.pause:
                         self.pause = False
+
+                    if self.action and self.money >= 200:
+                        if self.btn_quit[0] - 200 <= x <= self.btn_quit[0] - 200 + self.btn_quit[2] and \
+                                self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
+                            self.action = False
+                            self.pause = False
+                            self.flags[self.num] = True
+                            self.money -= 200
+                            self.towers += [self.towers_in[self.num]]
+                        elif self.btn_quit[0] + 250 <= x <= self.btn_quit[0] + 250 + self.btn_quit[2] and \
+                                self.btn_quit[1] <= y <= self.btn_quit[1] + self.btn_quit[3]:
+                            self.action = False
+                            self.pause = False
+                    elif self.action:
+                        if self.btn_quit[0] + 20 <= x <= self.btn_quit[0] + 20 + self.btn_quit[2] and \
+                                self.btn_quit[1] + 20 <= y <= self.btn_quit[1] + 20 + self.btn_quit[3]:
+                            self.action = False
+                            self.pause = False
+
+                    # добавить деньги
+                    if 322 <= x <= 440 and 390 <= y <= 440 and not self.flags[0]:
+                        self.num = 0
+                        self.pause = True
+                        self.action = True
+                    elif 565 <= x <= 675 and 165 <= y <= 215 and not self.flags[1]:
+                        self.num = 1
+                        self.pause = True
+                        self.action = True
+                    elif 45 <= x <= 155 and 410 <= y <= 455 and not self.flags[2]:
+                        self.num = 2
+                        self.pause = True
+                        self.action = True
+                    elif 1053 <= x <= 1165 and 180 <= y <= 220 and not self.flags[3]:
+                        self.num = 3
+                        self.pause = True
+                        self.action = True
+                    elif 820 <= x <= 926 and 356 <= y <= 398 and not self.flags[4]:
+                        self.num = 4
+                        self.pause = True
+                        self.action = True
+                    elif 1100 <= x <= 1214 and 395 <= y <= 435 and not self.flags[5]:
+                        self.num = 5
+                        self.pause = True
+                        self.action = True
+                    elif 1056 <= x <= 1163 and 608 <= y <= 650 and not self.flags[6]:
+                        self.num = 6
+                        self.pause = True
+                        self.action = True
 
             if not self.pause:
                 to_del = []

@@ -26,7 +26,6 @@ class ArcherTower(Tower):
         self.damage = 1
         self.original_damage = self.damage
         self.width = self.height = 90
-        self.moving = False
         self.name = "archer"
         self.timer = time.time()
         self.coord_x, self.coord_y = x, y
