@@ -15,7 +15,7 @@ class Orc(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "orc"
-        self.money = 5
-        self.max_health = 5
+        self.money = 30
+        self.max_health = 7
         self.health = self.max_health
         self.imgs = imgs[:]

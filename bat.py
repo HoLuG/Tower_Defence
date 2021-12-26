@@ -15,7 +15,7 @@ class Bat(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "bat"
-        self.money = 5
-        self.max_health = 5
+        self.money = 10
+        self.max_health = 2
         self.health = self.max_health
         self.imgs = imgs[:]

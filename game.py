@@ -21,10 +21,10 @@ def print_text(self, message, x, y, font_color=(23, 41, 32), font_type=filename,
     self.win.blit(text, (x, y))
 
 
-waves = [[1, 0, 3],
-         [2, 0, 2],
-         [0, 1, 0],
-         ]
+waves = [[0, 10, 1],
+         [8, 2, 2],
+         [5, 8, 4],
+         [10, 3, 8]]
 attack_tower_names = ["archer", "archer2"]
 support_tower_names = ["range", "damage"]
 
