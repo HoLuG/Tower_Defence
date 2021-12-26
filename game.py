@@ -69,7 +69,7 @@ class Game:
         self.playPauseButton = PlayPauseButton(play_btn, pause_btn, 20, self.height - 60)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("Terminal", 60)
-        self.time_left = 30.0
+        self.time_left = 20.0
 
     def gen_enemies(self):
         if sum(self.current_wave) == 0:
@@ -78,18 +78,17 @@ class Game:
                     self.wave += 1
                     self.current_wave = waves[self.wave]
 
-        else:
-            wave_enemies = [Skeleton(), Bat(), Orc()]
-            for x in range(len(self.current_wave)):
-                if self.current_wave[x] != 0:
-                    self.enemies.append(wave_enemies[x])
-                    self.current_wave[x] = self.current_wave[x] - 1
-                    break
+        wave_enemies = [Skeleton(), Bat(), Orc()]
+        for x in range(len(self.current_wave)):
+            if self.current_wave[x] != 0:
+                self.enemies.append(wave_enemies[x])
+                self.current_wave[x] = self.current_wave[x] - 1
+                break
 
     def draw(self):
         self.win.blit(self.bg, (0, 0))
-        #  if 0 < self.time_left < 2:
-            #  self.win.blit(self.time_left_rendered, (0, 0))
+        if 0 < self.time_left < 20:
+            self.win.blit(self.time_left_rendered, (0, 0))
 
         for en in self.enemies:
             en.draw(self.win)
@@ -164,23 +163,24 @@ class Game:
     def run(self):
         running = True
         end = 'good'
+        self.flag = False
+        self.time_left = 20.0
         while running:
-            self.clock.tick(500)
             x, y = pygame.mouse.get_pos()
-            # if len(self.enemies) == 0:
-                #  self.time_left = 5.0
-                #  while self.time_left > 0:
-                #      time_passed = self.clock.tick()
-                #      time_passed_seconds = time_passed / 1000.
-                #      self.time_left -= time_passed_seconds
-                #      self.time_left_rendered = self.font.render(
-                #          "Time left = {:02}:{:02}".format(round(int(self.time_left) / 60),
-                #                                           round(int(self.time_left) % 60)), False,
-                #          (255, 255, 255))
-                #      self.win.blit(self.time_left_rendered, (0, 0))
-                #      self.draw()
+            if len(self.enemies) == 0 and not self.flag and self.wave + 1 < len(waves):
+                if self.time_left > 0:
+                    time_passed = self.clock.tick()
+                    time_passed_seconds = time_passed / 1000.
+                    self.time_left -= time_passed_seconds
+                    self.time_left_rendered = self.font.render(
+                        "Time left = {:02}:{:02}".format(round(int(self.time_left) / 60),
+                                                         round(int(self.time_left) % 60)), False,
+                        (255, 255, 255))
+                    self.win.blit(self.time_left_rendered, (0, 0))
+                else:
+                    self.flag = True
 
-            if not self.pause:
+            if not self.pause and self.flag:
                 if time.time() - self.timer >= random.randrange(1, 9):
                     self.timer = time.time()
                     self.gen_enemies()
@@ -269,7 +269,7 @@ class Game:
                         self.pause = True
                         self.action = True
 
-            if not self.pause:
+            if not self.pause and self.flag:
                 to_del = []
                 for en in self.enemies:
                     en.move()
@@ -286,12 +286,17 @@ class Game:
                 for tw in self.towers:
                     tw.attack(self.enemies)
 
-            if self.lives <= 0:
-                running = False
-                end = 'Bad'
+                if self.lives <= 0:
+                    running = False
+                    end = 'Bad'
 
-            if self.wave + 1 >= len(waves):
-                running = False
+                if self.wave + 1 == len(waves) and self.enemies == []:
+                    running = False
+
+                if not self.enemies:
+                    time_passed = self.clock.tick()
+                    self.flag = False
+                    self.time_left = 20.0
 
             pygame.event.pump()
             self.draw()
