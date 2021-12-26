@@ -20,13 +20,10 @@ class ArcherTower(Tower):
         self.tower_imgs = tower_imgs1[:]
         self.archer_count = 0
         self.range = 220
-        self.original_range = self.range
         self.inRange = False
         self.left = True
         self.damage = 1
-        self.original_damage = self.damage
         self.width = self.height = 90
-        self.name = "archer"
         self.timer = time.time()
         self.coord_x, self.coord_y = x, y
 

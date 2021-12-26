@@ -3,11 +3,7 @@ class Tower:
         self.x = x
         self.y = y
         self.width = 0
-        self.height = 0
         self.tower_imgs = []
-        self.damage = 1
-
-        self.place_color = (0, 0, 255, 100)
 
     def draw(self, win):
         img = self.tower_imgs[0]

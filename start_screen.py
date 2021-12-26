@@ -8,7 +8,7 @@ filename = "game assets/" + 'PingPong.ttf'
 
 
 def print_text(self, message, x, y, font_color=(23, 41, 32), font_type=filename,
-               font_size=30):  # печать текста на экран
+               font_size=30):
     font_type = pygame.font.Font(font_type, font_size)
     text = font_type.render(message, True, font_color)
     self.win.blit(text, (x, y))
@@ -45,6 +45,9 @@ class MainMenu:
                     if self.btn_start[0] <= x <= self.btn_start[0] + self.btn_start[2]:
                         if self.btn_start[1] <= y <= self.btn_start[1] + self.btn_start[3]:
                             game = Game(self.win)
+                            pygame.mixer.music.load("game assets/background.mp3")
+                            pygame.mixer.music.set_volume(0.5)
+                            pygame.mixer.music.play(loops=-1)
                             game.run()
                             del game
                     if self.btn_quit[0] <= x <= self.btn_quit[0] + self.btn_quit[2]:

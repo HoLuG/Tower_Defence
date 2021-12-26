@@ -7,7 +7,7 @@ import time
 import random
 import sys
 from archerTower import ArcherTower
-from game_menu import PlayPauseButton
+from Button import PlayPauseButton
 
 pygame.init()
 
@@ -240,7 +240,6 @@ class Game:
                             self.action = False
                             self.pause = False
 
-                    # добавить деньги
                     if 322 <= x <= 440 and 390 <= y <= 440 and not self.flags[0]:
                         self.num = 0
                         self.pause = True
@@ -276,7 +275,7 @@ class Game:
                     en.move()
                     if en.y > 798:
                         to_del.append(en)
-                # delete all enemies off the screen
+
                 for d in to_del:
                     self.lives -= 1
                     self.enemies.remove(d)
