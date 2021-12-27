@@ -73,6 +73,7 @@ class Game:
 
     def gen_enemies(self):
         if sum(self.current_wave) == 0:
+            self.gen = 0
             if len(self.enemies) == 0:
                 if self.wave + 1 < len(waves):
                     self.wave += 1
@@ -167,7 +168,7 @@ class Game:
         self.time_left = 20.0
         while running:
             x, y = pygame.mouse.get_pos()
-            if len(self.enemies) == 0 and not self.flag and self.wave + 1 < len(waves):
+            if len(self.enemies) == 0 and not self.flag and self.wave + 1 < len(waves) and not self.pause:
                 if self.time_left > 0:
                     time_passed = self.clock.tick()
                     time_passed_seconds = time_passed / 1000.
@@ -179,9 +180,13 @@ class Game:
                     self.win.blit(self.time_left_rendered, (0, 0))
                 else:
                     self.flag = True
+                    self.gen = 0
+            elif len(self.enemies) == 0 and not self.flag and self.wave + 1 < len(waves):
+                time_passed = self.clock.tick()
 
             if not self.pause and self.flag:
                 if time.time() - self.timer >= random.randrange(1, 9):
+                    self.gen = 1
                     self.timer = time.time()
                     self.gen_enemies()
 
@@ -293,7 +298,7 @@ class Game:
                 if self.wave + 1 == len(waves) and self.enemies == []:
                     running = False
 
-                if not self.enemies:
+                if not self.enemies and self.gen == 0:
                     time_passed = self.clock.tick()
                     self.flag = False
                     self.time_left = 20.0
