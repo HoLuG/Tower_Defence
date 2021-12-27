@@ -75,8 +75,8 @@ class Game:
         if sum(self.current_wave) == 0:
             self.gen = 0
             if len(self.enemies) == 0:
-                if self.wave + 1 < len(waves):
-                    self.wave += 1
+                self.wave += 1
+                if self.wave < len(waves):
                     self.current_wave = waves[self.wave]
 
         wave_enemies = [Skeleton(), Bat(), Orc()]
@@ -103,6 +103,8 @@ class Game:
 
         self.win.blit(text, (start_x - text.get_width() - 10, -15))
         self.win.blit(life, (start_x, 10))
+        text = self.life_font.render('Wave ' + str(self.wave + 1), True, (255, 255, 255))
+        self.win.blit(text, (1125, 100))
 
         text = self.life_font.render(str(self.money), True, (255, 255, 255))
         money = pygame.transform.scale(self.money_img, (50, 50))
